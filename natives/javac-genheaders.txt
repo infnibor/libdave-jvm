@@ -1,0 +1,6 @@
+-h ./src/main/cpp
+-d ./build/javac-classes
+--source 8
+--source-path ../api/src/main/java
+-cp /home/alula/.m2/repository/org/jetbrains/annotations/26.0.2/annotations-26.0.2.jar
+../impl-jni/src/main/java/moe/kyokobot/libdave/natives/DaveNativeBindings.java
