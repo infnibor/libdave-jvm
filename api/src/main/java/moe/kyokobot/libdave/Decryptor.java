@@ -35,7 +35,9 @@ public interface Decryptor extends AutoCloseable {
      * @param encryptedFrameSize The size of the encrypted frame.
      * @return The maximum size of the plaintext frame in bytes.
      */
-    long getMaxPlaintextByteSize(MediaType mediaType, long encryptedFrameSize);
+    default long getMaxPlaintextByteSize(MediaType mediaType, long encryptedFrameSize) {
+        return encryptedFrameSize;
+    }
 
     /**
      * Decrypts an encrypted frame.

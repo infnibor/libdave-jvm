@@ -44,12 +44,6 @@ public class NativeEncryptor extends DaveNativeHandle implements Encryptor {
     }
 
     @Override
-    public long getMaxCiphertextByteSize(MediaType mediaType, long frameSize) {
-        assertOpen();
-        return DaveNativeBindings.inst().daveEncryptorGetMaxCiphertextByteSize(handle, mediaType.getValue(), frameSize);
-    }
-
-    @Override
     public int encrypt(MediaType mediaType, int ssrc, byte[] frame, byte[] encryptedFrame) {
         assertOpen();
         return DaveNativeBindings.inst().daveEncryptorEncrypt(handle, mediaType.getValue(), ssrc, frame, encryptedFrame);

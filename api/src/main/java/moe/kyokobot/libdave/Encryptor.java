@@ -50,7 +50,11 @@ public interface Encryptor extends AutoCloseable {
      * @param frameSize The size of the plaintext frame.
      * @return The maximum size of the encrypted frame in bytes.
      */
-    long getMaxCiphertextByteSize(MediaType mediaType, long frameSize);
+    default long getMaxCiphertextByteSize(MediaType mediaType, long frameSize) {
+        final int kSupplementalBytes = 11;
+        final int kTransformPaddingBytes = 64;
+        return frameSize + kSupplementalBytes + kTransformPaddingBytes;
+    }
 
     /**
      * Encrypts a media frame.

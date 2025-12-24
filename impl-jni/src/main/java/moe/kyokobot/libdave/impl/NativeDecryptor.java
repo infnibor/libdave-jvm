@@ -30,12 +30,6 @@ public class NativeDecryptor extends DaveNativeHandle implements Decryptor {
     }
 
     @Override
-    public long getMaxPlaintextByteSize(MediaType mediaType, long encryptedFrameSize) {
-        assertOpen();
-        return DaveNativeBindings.inst().daveDecryptorGetMaxPlaintextByteSize(handle, mediaType.getValue(), encryptedFrameSize);
-    }
-
-    @Override
     public int decrypt(MediaType mediaType, byte[] encryptedFrame, byte[] frame) {
         assertOpen();
         return DaveNativeBindings.inst().daveDecryptorDecrypt(handle, mediaType.getValue(), encryptedFrame, frame);
