@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/discord/libdave
+	branch = main
+	commit = 52cd56dc550f447fb354b3a06c9e2d2e2a4309c6
+	parent = 606ee9a45a0466ea4d6360b500008d7342583e72
+	method = merge
+	cmdver = 0.4.5
