@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/cisco/mlspp
+	branch = 1cc50a124a3bc4e143a787ec934280dc70c1034d
+	commit = 1cc50a124a3bc4e143a787ec934280dc70c1034d
+	parent = 7a1e5bc1f96155572f2f28bb9fc5dbdbf3f53a9d
+	method = merge
+	cmdver = 0.4.5
