@@ -19,11 +19,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#if 0 /// KOE PATCH BEGIN
 #if (defined(_WIN32) || defined(_WIN64))
 #define DAVE_EXPORT __declspec(dllexport)
 #else
 #define DAVE_EXPORT __attribute__((visibility("default")))
 #endif
+#endif /// KOE PATCH END
 
 #define DECLARE_OPAQUE_HANDLE(x) typedef struct x##_s* x
 

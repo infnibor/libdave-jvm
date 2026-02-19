@@ -1,8 +1,8 @@
 #include "jni_utils.h"
 #include "moe_kyokobot_libdave_natives_DaveNativeBindings.h"
-#include <array_view.h>
-#include <dave.h>
-#include <dave_interfaces.h>
+#include <dave/array_view.h>
+#include <dave/dave.h>
+#include <dave/dave_interfaces.h>
 
 using namespace kyoko::libdave;
 using namespace discord::dave;
