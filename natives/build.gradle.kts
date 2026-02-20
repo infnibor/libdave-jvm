@@ -14,9 +14,23 @@ dependencies {
 }
 
 val processResources: Copy by tasks
-val target = ext["target"]?.toString() ?: ""
-val platform = ext["platform"] as String
+val target = ext["target"]?.toString()
+    ?: throw GradleException("natives project requires property 'target' (set -Ptarget= or target in gradle.properties)")
+val platform = ext["platform"]?.toString()
+    ?: throw GradleException("natives project requires 'platform' derived from target")
 val artifactName = "natives-$platform"
+
+val nativeLibNames = setOf("libdave-jvm.so", "libdave-jvm.dylib", "dave-jvm.dll")
+val buildDir = layout.projectDirectory.dir("cmake-build-$target")
+fun requireNativeLibBuilt() {
+    if (!buildDir.asFile.exists()) {
+        throw GradleException("Native library not built. Build with cmake in natives/cmake-build-$target/ first.")
+    }
+    val hasLib = buildDir.asFile.listFiles()?.any { it.name in nativeLibNames } == true
+    if (!hasLib) {
+        throw GradleException("Native library (libdave-jvm.so, libdave-jvm.dylib, or dave-jvm.dll) not found in natives/cmake-build-$target/")
+    }
+}
 
 // This checks if the version already exists on maven central, and skips if a successful response is returned.
 val shouldPublish by lazy {
@@ -35,7 +49,7 @@ tasks.withType<Jar> {
 
 tasks.register<Copy>("moveResources") {
     group = "build"
-
+    doFirst { requireNativeLibBuilt() }
     from("cmake-build-$target/")
 
     include {

@@ -53,14 +53,21 @@ subprojects {
         triplet.startsWith("aarch64") && "windows" in triplet -> "win-aarch64"
         triplet.startsWith("arm") && "windows" in triplet -> "win-arm"
 
+        triplet.startsWith("x86_64") && "darwin" in triplet -> "darwin-x86-64"
+        (triplet.startsWith("aarch64e") || "arm64e" in triplet) && "darwin" in triplet -> "darwin-arm64e"
+        triplet.startsWith("aarch64") && "darwin" in triplet -> "darwin-arm64"
         "darwin" in triplet -> "darwin"
 
         else -> throw IllegalArgumentException("Unknown platform: $triplet")
     }
 
-    // Testing: "x86_64-unknown-linux-gnu"
-    ext["target"] = findProperty("target") as? String ?: throw AssertionError("Invalid target")
-    ext["platform"] = getPlatform(ext["target"].toString())
+    // Resolve target the same way as settings.gradle.kts (property, then TARGET env) so natives gets ext["target"] when only TARGET is set
+    val targetProp = (findProperty("target") as? String)?.takeIf { it.isNotBlank() }
+        ?: System.getenv("TARGET")?.takeIf { it.isNotBlank() }
+    if (targetProp != null) {
+        ext["target"] = targetProp
+        ext["platform"] = getPlatform(targetProp)
+    }
 
     val generatePom: MavenPom.() -> Unit = {
         packaging = "jar"
