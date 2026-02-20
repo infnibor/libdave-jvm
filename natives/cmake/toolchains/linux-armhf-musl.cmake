@@ -8,3 +8,8 @@ set(CMAKE_SHARED_LINKER_FLAGS_INIT "-fuse-ld=lld")
 set(CMAKE_MODULE_LINKER_FLAGS_INIT "-fuse-ld=lld")
 set(CMAKE_C_COMPILER_TARGET arm-linux-musleabihf)
 set(CMAKE_CXX_COMPILER_TARGET arm-linux-musleabihf)
+if(EXISTS "/usr/arm-linux-musleabihf")
+  # Prefer an explicit musl sysroot when available (required for crt/libc discovery).
+  set(CMAKE_SYSROOT "/usr/arm-linux-musleabihf")
+  set(CMAKE_FIND_ROOT_PATH "/usr/arm-linux-musleabihf")
+endif()
