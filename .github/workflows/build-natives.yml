@@ -58,15 +58,12 @@ jobs:
           - os: windows-2022
             target: x86_64-pc-windows-msvc
             cmake_arch: x64
-            openssl_no_asm: "false"
           - os: windows-2022
             target: i686-pc-windows-msvc
             cmake_arch: Win32
-            openssl_no_asm: "false"
           - os: windows-2022
             target: aarch64-pc-windows-msvc
             cmake_arch: ARM64
-            openssl_no_asm: "true"
           # macOS Xcode 15
           - os: macos-14
             target: x86_64-apple-darwin
@@ -108,9 +105,7 @@ jobs:
         if: matrix.os == 'windows-2022'
         working-directory: ${{ github.workspace }}
         run: |
-          $extra = ""
-          if ("${{ matrix.openssl_no_asm }}" -eq "true") { $extra = "-DOPENSSL_NO_ASM=ON" }
-          cmake -S natives -B natives/cmake-build-${{ matrix.target }} -G "Visual Studio 17 2022" -A ${{ matrix.cmake_arch }} -T ClangCL -DCMAKE_BUILD_TYPE=Release $extra
+          cmake -S natives -B natives/cmake-build-${{ matrix.target }} -G "Visual Studio 17 2022" -A ${{ matrix.cmake_arch }} -T ClangCL -DCMAKE_BUILD_TYPE=Release -DOPENSSL_NO_ASM=ON
 
       - name: Configure CMake (macOS)
         if: matrix.os == 'macos-14'

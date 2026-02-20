@@ -16,10 +16,34 @@ endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   message(STATUS "Building with Clang or GCC")
 
-  set(_prefix_map_opt "-frandom-seed=0 -ffile-prefix-map=\"${CMAKE_SOURCE_DIR}\"=. -fmacro-prefix-map=\"${CMAKE_SOURCE_DIR}\"=.")
-  set(_common_flags "-flto=full -fwhole-program-vtables -fvisibility=hidden -fvisibility-inlines-hidden -ffunction-sections -fdata-sections -g")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_prefix_map_opt} ${_common_flags}")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_prefix_map_opt} ${_common_flags}")
+  set(_flags_list
+    "-frandom-seed=0"
+    "-ffile-prefix-map=\"${CMAKE_SOURCE_DIR}\"=."
+    "-fmacro-prefix-map=\"${CMAKE_SOURCE_DIR}\"=."
+    "-flto=full"
+    "-fwhole-program-vtables"
+    "-fvisibility=hidden"
+    "-fvisibility-inlines-hidden"
+    "-ffunction-sections"
+    "-fdata-sections"
+    "-g"
+  )
+
+  # Check for clang-cl which requires -Xclang before these flags
+  set(_is_clang_cl OFF)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
+    set(_is_clang_cl ON)
+  endif()
+
+  foreach(_flag ${_flags_list})
+    if(_is_clang_cl)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang ${_flag}")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Xclang ${_flag}")
+    else()
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_flag}")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_flag}")
+    endif()
+  endforeach()
 elseif(MSVC)
   message(STATUS "Building with MSVC")
 else()
