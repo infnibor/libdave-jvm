@@ -8,12 +8,34 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if(MINGW)
+  message(FATAL_ERROR "MinGW is not supported, use clang-cl or MSVC instead")
+endif()
+
 # if we're on clang or gcc, enable prefix mapping
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  message(STATUS "Building with Clang or GCC")
+
   set(_prefix_map_opt "-frandom-seed=0 -ffile-prefix-map=\"${CMAKE_SOURCE_DIR}\"=. -fmacro-prefix-map=\"${CMAKE_SOURCE_DIR}\"=.")
-  set(_common_flags "-flto=full -fvisibility=hidden")
+  set(_common_flags "-flto=full -fwhole-program-vtables -fvisibility=hidden -fvisibility-inlines-hidden -ffunction-sections -fdata-sections -g")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_prefix_map_opt} ${_common_flags}")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_prefix_map_opt} ${_common_flags}")
+elseif(MSVC)
+  message(STATUS "Building with MSVC")
+else()
+  message(WARNING "Building with unknown compiler: ${CMAKE_CXX_COMPILER_ID}")
+endif()
+
+# split debug symbols into a separate file
+if(APPLE)
+  find_program(DSYMUTIL_PROGRAM dsymutil)
+  if (DSYMUTIL_PROGRAM)
+    foreach(lang C CXX)
+      foreach(var LINK_EXECUTABLE CREATE_SHARED_LIBRARY)
+        set(CMAKE_${lang}_${var} "${CMAKE_${lang}_${var}}" "${DSYMUTIL_PROGRAM} <TARGET>")
+      endforeach()
+    endforeach()
+  endif()
 endif()
 
 set(MLS_CXX_NAMESPACE "mlspp" CACHE STRING "Top-level Namespace for CXX")
@@ -33,7 +55,15 @@ set(MLSPP_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake" CACHE PATH "vendored mlspp")
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 add_subdirectory(boringssl)
-find_package(OpenSSL REQUIRED)
+
+# don't waste time building certain targets that we don't need
+set_target_properties(
+  bssl # boringssl executable
+  PROPERTIES
+  EXCLUDE_FROM_ALL TRUE
+)
+
+# find_package(OpenSSL REQUIRED)
 
 set(nlohmann_json_DIR "${CMAKE_CURRENT_SOURCE_DIR}/json-cpp")
 add_subdirectory(mlspp)
@@ -52,8 +82,17 @@ add_library(dave-jvm SHARED
   ${DJ_ROOT}/bind_session.cpp
 )
 
-target_link_libraries(dave-jvm PRIVATE libdave JNI::JNI MLSPP::mlspp)
+target_link_libraries(dave-jvm PRIVATE libdave JNI::JNI MLSPP::mlspp crypto)
 target_compile_features(dave-jvm PRIVATE cxx_std_17)
 target_include_directories(dave-jvm PRIVATE
   ${PROJECT_SOURCE_DIR}/libdave/cpp/includes
 )
+# Output shared lib and PDB at build root so Gradle moveResources and CI artifact collection find them
+foreach(_config Release Debug RelWithDebInfo MinSizeRel)
+  set_target_properties(dave-jvm PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}"
+    LIBRARY_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}"
+    ARCHIVE_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}"
+    PDB_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}"
+    COMPILE_PDB_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}")
+endforeach()

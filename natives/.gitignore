@@ -1,4 +1,10 @@
+# build artifacts
 /build/
 /build-*/
 /cmake-build-*/
+
+# natives we don't want in the repo
 /src/main/resources/natives/
+
+# clangd
+/.cache/

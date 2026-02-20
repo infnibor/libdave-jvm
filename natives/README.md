@@ -4,6 +4,15 @@ This directory contains the native libraries for the libdave-jvm project.
 
 We vendor everything using [git-subrepo](https://github.com/ingydotnet/git-subrepo). No internet access or external build tools like `vcpkg` are required.
 
+## Building
+
+```bash
+# macOS x86_64
+cmake -S . -B build-darwin-x86_64 -G "Ninja Multi-Config" -DCMAKE_OSX_ARCHITECTURES=x86_64
+cmake --build build-darwin-x86_64 --config Release --parallel
+
+```
+
 ## Patches
 
 ### Markers
