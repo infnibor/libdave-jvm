@@ -21,7 +21,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+## KOE PATCH BEGIN
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT MSVC)
+## KOE PATCH END
   add_compile_options(-Wall -pedantic -Wextra -Werror -Wimplicit-int-conversion)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   add_compile_options(-Wall -pedantic -Wextra -Werror)

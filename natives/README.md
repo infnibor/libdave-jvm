@@ -33,4 +33,6 @@ We use the following markers to mark changes:
 
 ### Current patches
 
-- [dave/dave.h](libdave/cpp/includes/dave/dave.h): Disabled symbol exports, as we only want to export the JNI symbols.
+- [mlspp/CMakeLists.txt](mlspp/CMakeLists.txt): Fixed clang-cl build.
+- [libdave/cpp/includes/dave/dave.h](libdave/cpp/includes/dave/dave.h): Disabled symbol exports, as we only want to export the JNI symbols.
+- [libdave/cpp/CMakeLists.txt](libdave/cpp/CMakeLists.txt): Fixed clang-cl build.

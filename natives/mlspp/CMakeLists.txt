@@ -42,7 +42,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message("Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+## KOE PATCH BEGIN
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT MSVC)
+## KOE PATCH END
   add_compile_options(-Wall -pedantic -Wextra -Werror -Wmissing-declarations)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   # -Wno-dangling-reference because GCC apparently has some bugs in its implementation
