@@ -9,8 +9,9 @@ plugins {
 }
 
 val enablePublishing = false
+val publishable = setOf(":api", ":impl-jni", ":natives")
 
-subprojects {
+configure(subprojects.filter { it.path in publishable }) {
     group = "moe.kyokobot.libdave"
     version = "1.0-SNAPSHOT"
 

@@ -8,7 +8,8 @@ val targetFromEnv = System.getenv("TARGET")
 val targetFromProps = run {
     val f = File(rootDir, "gradle.properties")
     if (f.exists()) {
-        java.util.Properties().apply { f.inputStream().use { load(it) } }.getProperty("target")?.takeIf { it.isNotBlank() }
+        java.util.Properties().apply { f.inputStream().use { load(it) } }.getProperty("target")
+            ?.takeIf { it.isNotBlank() }
     } else null
 }
 val target = targetFromCmd ?: targetFromEnv ?: targetFromProps

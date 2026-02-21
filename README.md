@@ -25,7 +25,7 @@ without Netty in your classpath will result in a `NoClassDefFoundError`.
 
 **Add to your dependencies:**
 ```kotlin
-implementation("io.netty:netty-buffer:4.2.9.Final")
+implementation("io.netty:netty-buffer:4.2.10.Final")
 ```
 
 See the `moe.kyokobot.libdave.netty` package documentation for further details.
