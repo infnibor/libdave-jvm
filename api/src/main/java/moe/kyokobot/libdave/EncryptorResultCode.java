@@ -11,7 +11,19 @@ public enum EncryptorResultCode {
     /**
      * Encryption failed (generic error).
      */
-    ENCRYPTION_FAILURE(1);
+    ENCRYPTION_FAILURE(1),
+    /**
+     * Encryption failed because the key ratchet for the stream is missing.
+     */
+    MISSING_KEY_RATCHET(2),
+    /**
+     * Encryption failed because the underlying cryptor was missing or invalid.
+     */
+    MISSING_CRYPTOR(3),
+    /**
+     * Encryption failed due to too many attempts to encrypt the frame.
+     */
+    TOO_MANY_ATTEMPTS(4);
 
     private final int value;
 
