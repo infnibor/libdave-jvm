@@ -50,10 +50,10 @@ jobs:
             target: aarch64-unknown-linux-musl
             toolchain: natives/cmake/toolchains/linux-aarch64-musl.cmake
             linux_packages: "build-essential cmake ninja-build clang lld musl-tools gcc-aarch64-linux-gnu g++-aarch64-linux-gnu"
-          - os: ubuntu-22.04
-            target: arm-unknown-linux-musleabihf
-            toolchain: natives/cmake/toolchains/linux-armhf-musl.cmake
-            linux_packages: "build-essential cmake ninja-build clang lld musl-tools gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf"
+          # - os: ubuntu-22.04 # TODO: This one is broken in particular, but also not important for us for now
+          #   target: arm-unknown-linux-musleabihf
+          #   toolchain: natives/cmake/toolchains/linux-armhf-musl.cmake
+          #   linux_packages: "build-essential cmake ninja-build clang lld musl-tools gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf"
           # Windows MSVC 2022
           - os: windows-2022
             target: x86_64-pc-windows-msvc
