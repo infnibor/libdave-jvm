@@ -10,10 +10,12 @@ public class NativeKeyRatchet extends DaveNativeHandle implements KeyRatchet {
     }
 
     @Override public byte[] getEncryptionKey(int keyGeneration) {
+        assertOpen();
         return DaveNativeBindings.inst().daveKeyRatchetGetEncryptionKey(handle, keyGeneration);
     }
 
     @Override public void deleteKey(int keyGeneration) {
+        assertOpen();
         DaveNativeBindings.inst().daveKeyRatchetDeleteKey(handle, keyGeneration);
     }
 
