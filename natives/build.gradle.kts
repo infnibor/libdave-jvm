@@ -47,6 +47,10 @@ tasks.register<Delete>("cleanNatives") {
     tasks["clean"].dependsOn(this)
 }
 
+tasks.getByName("build") {
+    dependsOn("moveResources")
+}
+
 processResources.include {
     it.isDirectory || it.file.parentFile.name == platform
 }
