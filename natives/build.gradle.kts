@@ -1,16 +1,6 @@
-import org.gradle.kotlin.dsl.register
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
-
-plugins {
-    id("java-library")
-    id("signing")
-    id("maven-publish")
-}
-
 dependencies {
-    api(project(":api"))
-    api(project(":impl-jni"))
+    api(projects.api)
+    api(projects.implJni)
 }
 
 val processResources: Copy by tasks
@@ -31,20 +21,10 @@ fun requireNativeLibBuilt() {
         throw GradleException("Native library (libdave-jvm.so, libdave-jvm.dylib, or dave-jvm.dll) not found in natives/cmake-build-$target/")
     }
 }
+logger.lifecycle("Target: $target, Platform: $platform, Artifact Name: $artifactName")
 
-// This checks if the version already exists on maven central, and skips if a successful response is returned.
-val shouldPublish by lazy {
-//    val conn =
-//        URL("https://repo1.maven.org/maven2/club/minnced/$artifactName/$version/").openConnection() as HttpsURLConnection
-//    conn.requestMethod = "GET"
-//    conn.connect()
-//
-//    conn.responseCode > 400
-    false
-}
-
-tasks.withType<Jar> {
-    archiveBaseName.set(artifactName)
+base {
+    archivesName = artifactName
 }
 
 tasks.register<Copy>("moveResources") {
@@ -71,35 +51,8 @@ processResources.include {
     it.isDirectory || it.file.parentFile.name == platform
 }
 
-
-publishing.publications {
-    create<MavenPublication>("Release") {
-        from(components["java"])
-
-        groupId = group.toString()
-        artifactId = artifactName
-        version = version.toString()
-
-        pom.apply(ext["generatePom"] as MavenPom.() -> Unit)
-        pom.name.set(artifactName)
+mavenPublishing {
+    pom {
+        name = artifactName
     }
-}
-
-val signingKey: String? by project
-val signingPassword: String? by project
-
-if (signingKey != null) {
-    signing {
-        useInMemoryPgpKeys(signingKey, signingPassword ?: "")
-        val publications = publishing.publications.toTypedArray()
-        sign(*publications)
-    }
-} else {
-    println("Could not find signingKey")
-}
-
-// Only run publishing tasks if the version doesn't already exist
-
-tasks.withType<PublishToMavenRepository> {
-    enabled = enabled && shouldPublish
 }
