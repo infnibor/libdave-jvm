@@ -89,7 +89,7 @@ jobs:
           cache: "gradle"
 
       - name: Install Linux build deps
-        if: matrix.os == 'ubuntu-22.04'
+        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-22.04-arm'
         run: |
           sudo apt-get update
           sudo apt-get install -y ${{ matrix.linux_packages }}
@@ -108,7 +108,7 @@ jobs:
           clang --version
 
       - name: Configure CMake (Linux)
-        if: matrix.os == 'ubuntu-22.04'
+        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-22.04-arm'
         working-directory: ${{ github.workspace }}
         run: |
           cmake -S natives -B natives/cmake-build-${{ matrix.target }} \
@@ -178,7 +178,7 @@ jobs:
           path: natives/build/libs/natives-*.jar
 
       - name: Upload debug symbols (Linux)
-        if: matrix.os == 'ubuntu-22.04'
+        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-22.04-arm'
         uses: actions/upload-artifact@v6
         with:
           name: natives-symbols-${{ matrix.target }}
