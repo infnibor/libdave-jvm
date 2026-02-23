@@ -26,7 +26,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     "-fvisibility-inlines-hidden"
     "-ffunction-sections"
     "-fdata-sections"
-    "-g"
   )
 
   # Check for clang-cl which requires -Xclang before these flags
@@ -120,3 +119,12 @@ foreach(_config Release Debug RelWithDebInfo MinSizeRel)
     PDB_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}"
     COMPILE_PDB_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}")
 endforeach()
+
+if(LINUX)
+  target_link_options(dave-jvm PRIVATE "-Wl,--version-script,${DJ_ROOT}/libdave.exports" "-Wl,--build-id")
+  add_custom_command(TARGET dave-jvm POST_BUILD
+    COMMAND ${CMAKE_STRIP} --only-keep-debug -o $<TARGET_FILE:dave-jvm>.debug $<TARGET_FILE:dave-jvm>
+    COMMAND echo "Debug symbols saved to $<TARGET_FILE:dave-jvm>.debug"
+    COMMAND ${CMAKE_STRIP} --strip-debug $<TARGET_FILE:dave-jvm>
+    COMMAND echo "Debug symbols stripped from $<TARGET_FILE:dave-jvm>")
+endif()

@@ -1,0 +1,5 @@
+{
+  global:
+    Java_moe_kyokobot_libdave_natives_DaveNativeBindings_*;
+  local: *;
+};
