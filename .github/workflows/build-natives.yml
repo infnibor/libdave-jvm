@@ -95,19 +95,17 @@ jobs:
           sudo apt-get install -y ${{ matrix.linux_packages }}
           wget https://apt.llvm.org/llvm.sh -O /tmp/llvm.sh
           sudo bash /tmp/llvm.sh 19
-          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-19 100
-          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-19 100
-          sudo update-alternatives --install /usr/bin/lld lld /usr/bin/lld-19 100
-          sudo update-alternatives --install /usr/bin/lld-link lld-link /usr/bin/lld-link-19 100
-          sudo update-alternatives --install /usr/bin/ld.lld ld.lld /usr/bin/ld.lld-19 100
-          sudo update-alternatives --install /usr/bin/llvm-strip llvm-strip /usr/bin/llvm-strip-19 100
-          sudo update-alternatives --install /usr/bin/llvm-objdump llvm-objdump /usr/bin/llvm-objdump-19 100
-          sudo update-alternatives --install /usr/bin/llvm-objcopy llvm-objcopy /usr/bin/llvm-objcopy-19 100
-          sudo update-alternatives --install /usr/bin/llvm-readelf llvm-readelf /usr/bin/llvm-readelf-19 100
-          sudo update-alternatives --install /usr/bin/llvm-readobj llvm-readobj /usr/bin/llvm-readobj-19 100
-          sudo update-alternatives --install /usr/bin/llvm-size llvm-size /usr/bin/llvm-size-19 100
-          sudo update-alternatives --install /usr/bin/llvm-nm llvm-nm /usr/bin/llvm-nm-19 100
-          sudo update-alternatives --install /usr/bin/llvm-ranlib llvm-ranlib /usr/bin/llvm-ranlib-19 100
+          for tool in clang clang++ lld lld-link ld.lld llvm-strip llvm-objdump llvm-objcopy llvm-readelf llvm-readobj llvm-size llvm-nm llvm-ranlib; do
+            if [ -x "/usr/bin/${tool}-19" ]; then
+              sudo update-alternatives --install /usr/bin/$tool $tool /usr/bin/${tool}-19 100
+              sudo update-alternatives --set $tool /usr/bin/${tool}-19
+            fi
+          done
+
+          echo "** Clang alternatives **"
+          sudo update-alternatives --display clang || true
+          echo "** Clang version **"
+          clang --version
 
       - name: Configure CMake (Linux)
         if: matrix.os == 'ubuntu-22.04'
