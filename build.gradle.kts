@@ -143,7 +143,7 @@ fun getGitVersion(): VersionInfo {
     exec {
         standardOutput = versionStr
         errorOutput = versionStr
-        commandLine("git", "rev-parse", "--short", "HEAD")
+        commandLine("git", "describe", "--match=NeVeRmAtCh", "--always", "--abbrev=9", "--dirty")
     }
 
     return VersionInfo(versionStr.toString().trim(), true)
