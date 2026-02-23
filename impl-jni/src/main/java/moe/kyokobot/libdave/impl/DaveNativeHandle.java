@@ -8,6 +8,9 @@ public abstract class DaveNativeHandle implements AutoCloseable {
     protected boolean closed;
 
     protected DaveNativeHandle(long handle) {
+        if (handle == 0) {
+            throw new IllegalArgumentException("Handle cannot be a null pointer");
+        }
         this.handle = handle;
     }
 
