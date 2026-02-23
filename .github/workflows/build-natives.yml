@@ -26,7 +26,7 @@ jobs:
           - os: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
             toolchain: natives/cmake/toolchains/linux-x86_64-gnu.cmake
-            linux_packages: "build-essential cmake ninja-build clang lld"
+            linux_packages: "build-essential cmake ninja-build"
           - os: ubuntu-22.04
             target: i686-unknown-linux-gnu
             toolchain: natives/cmake/toolchains/linux-i686-gnu.cmake
@@ -95,7 +95,19 @@ jobs:
           sudo apt-get install -y ${{ matrix.linux_packages }}
           wget https://apt.llvm.org/llvm.sh -O /tmp/llvm.sh
           sudo bash /tmp/llvm.sh 19
-
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-19 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-19 100
+          sudo update-alternatives --install /usr/bin/lld lld /usr/bin/lld-19 100
+          sudo update-alternatives --install /usr/bin/lld-link lld-link /usr/bin/lld-link-19 100
+          sudo update-alternatives --install /usr/bin/ld.lld ld.lld /usr/bin/ld.lld-19 100
+          sudo update-alternatives --install /usr/bin/llvm-strip llvm-strip /usr/bin/llvm-strip-19 100
+          sudo update-alternatives --install /usr/bin/llvm-objdump llvm-objdump /usr/bin/llvm-objdump-19 100
+          sudo update-alternatives --install /usr/bin/llvm-objcopy llvm-objcopy /usr/bin/llvm-objcopy-19 100
+          sudo update-alternatives --install /usr/bin/llvm-readelf llvm-readelf /usr/bin/llvm-readelf-19 100
+          sudo update-alternatives --install /usr/bin/llvm-readobj llvm-readobj /usr/bin/llvm-readobj-19 100
+          sudo update-alternatives --install /usr/bin/llvm-size llvm-size /usr/bin/llvm-size-19 100
+          sudo update-alternatives --install /usr/bin/llvm-nm llvm-nm /usr/bin/llvm-nm-19 100
+          sudo update-alternatives --install /usr/bin/llvm-ranlib llvm-ranlib /usr/bin/llvm-ranlib-19 100
 
       - name: Configure CMake (Linux)
         if: matrix.os == 'ubuntu-22.04'
