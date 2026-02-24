@@ -251,6 +251,8 @@ public:
   }
 };
 
+void shutUpDave();
+
 } // namespace kyoko::libdave
 
 #endif // JNI_UTILS
