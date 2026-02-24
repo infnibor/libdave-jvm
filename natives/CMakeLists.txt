@@ -56,7 +56,12 @@ else()
   message(WARNING "Building with unknown compiler: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
-# split debug symbols into a separate file
+if(MSVC)
+  # Static CRT (/MT) to avoid msvcp140.dll version mismatch with JDK (constexpr mutex trap)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
+# split debug symbols into a separate file into a separate file
 if(APPLE)
   find_program(DSYMUTIL_PROGRAM dsymutil)
   if (DSYMUTIL_PROGRAM)
