@@ -20,13 +20,22 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     "-frandom-seed=0"
     "-ffile-prefix-map=\"${CMAKE_SOURCE_DIR}\"=."
     "-fmacro-prefix-map=\"${CMAKE_SOURCE_DIR}\"=."
-    "-flto=full"
-    "-fwhole-program-vtables"
     "-fvisibility=hidden"
     "-fvisibility-inlines-hidden"
     "-ffunction-sections"
     "-fdata-sections"
   )
+
+  if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    list(APPEND _flags_list
+      "-flto=full"
+      "-fwhole-program-vtables"
+    )
+  elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    list(APPEND _flags_list
+      "-flto=auto"
+    )
+  endif()
 
   # Check for clang-cl which requires -Xclang before these flags
   set(_is_clang_cl OFF)
