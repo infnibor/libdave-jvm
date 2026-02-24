@@ -91,7 +91,7 @@ jobs:
       - name: Install Linux build deps
         if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-22.04-arm'
         run: |
-          sudo apt-get update
+          sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
           sudo apt-get install -y ${{ matrix.linux_packages }}
 
           echo "** Clang alternatives **"
