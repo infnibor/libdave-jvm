@@ -8,6 +8,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported OUTPUT error)
+if(ipo_supported)
+  set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+  message(STATUS "LTO/IPO enabled")
+else()
+  message(WARNING "IPO is not supported: ${error}")
+endif()
+
 if(MINGW)
   message(FATAL_ERROR "MinGW is not supported, use clang-cl or MSVC instead")
 endif()
@@ -28,12 +37,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 
   if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     list(APPEND _flags_list
-      "-flto=full"
       "-fwhole-program-vtables"
-    )
-  elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    list(APPEND _flags_list
-      "-flto=auto"
     )
   endif()
 
