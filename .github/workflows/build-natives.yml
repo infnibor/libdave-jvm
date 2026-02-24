@@ -74,16 +74,10 @@ jobs:
           - os: windows-2022
             target: aarch64-pc-windows-msvc
             cmake_arch: ARM64
-          # macOS Xcode 15
+          # macOS Xcode 14 - universal (arm64, arm64e, x86_64)
           - os: macos-14
-            target: x86_64-apple-darwin
-            osx_arch: x86_64
-          - os: macos-14
-            target: aarch64-apple-darwin
-            osx_arch: arm64
-          - os: macos-14
-            target: aarch64e-apple-darwin
-            osx_arch: arm64e
+            target: universal-apple-darwin
+            osx_arch: "arm64;arm64e;x86_64"
 
     steps:
       - name: Checkout
@@ -138,7 +132,7 @@ jobs:
         run: |
           cmake -S natives -B natives/cmake-build-${{ matrix.target }} \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_OSX_ARCHITECTURES=${{ matrix.osx_arch }}
+            -DCMAKE_OSX_ARCHITECTURES="${{ matrix.osx_arch }}"
 
       - name: Build CMake (Linux/macOS)
         if: matrix.os != 'windows-2022'
