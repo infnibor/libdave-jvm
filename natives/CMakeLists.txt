@@ -29,9 +29,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   )
 
   if(LINUX)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-      list(APPEND _flags_list "-stdlib=libc++")
-    endif()
+    list(APPEND _flags_list "-static-libstdc++")
   endif()
 
   # Check for clang-cl which requires -Xclang before these flags
@@ -133,6 +131,4 @@ if(LINUX)
     COMMAND echo "Debug symbols saved to $<TARGET_FILE:dave-jvm>.debug"
     COMMAND ${CMAKE_STRIP} --strip-debug $<TARGET_FILE:dave-jvm>
     COMMAND echo "Debug symbols stripped from $<TARGET_FILE:dave-jvm>")
-
-  add_link_options(dave-jvm PRIVATE "-static-libstdc++")
 endif()
