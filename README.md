@@ -43,15 +43,25 @@ dependencies {
     // This will transitively include the `api` module.
     implementation("moe.kyokobot.libdave:impl-jni:1.0-SNAPSHOT")
 
+    // Linux (glibc 2.39)
     implementation("moe.kyokobot.libdave:natives-linux-x86-64:1.0-SNAPSHOT")
     implementation("moe.kyokobot.libdave:natives-linux-x86:1.0-SNAPSHOT")
     implementation("moe.kyokobot.libdave:natives-linux-aarch64:1.0-SNAPSHOT")
     implementation("moe.kyokobot.libdave:natives-linux-arm:1.0-SNAPSHOT")
+
+    // Linux (musl)
     implementation("moe.kyokobot.libdave:natives-linux-musl-x86-64:1.0-SNAPSHOT")
+    implementation("moe.kyokobot.libdave:natives-linux-musl-x86:1.0-SNAPSHOT")
     implementation("moe.kyokobot.libdave:natives-linux-musl-aarch64:1.0-SNAPSHOT")
+    implementation("moe.kyokobot.libdave:natives-linux-musl-arm:1.0-SNAPSHOT")
+
+    // Windows
     implementation("moe.kyokobot.libdave:natives-win-x86-64:1.0-SNAPSHOT")
     implementation("moe.kyokobot.libdave:natives-win-x86:1.0-SNAPSHOT")
-    implementation("moe.kyokobot.libdave:natives-darwin:1.0-SNAPSHOT")
+    implementation("moe.kyokobot.libdave:natives-win-aarch64:1.0-SNAPSHOT")
+
+    // macOS
+    implementation("moe.kyokobot.libdave:natives-darwin:1.0-SNAPSHOT") // Universal Intel + Apple Silicon
 }
 ```
 
