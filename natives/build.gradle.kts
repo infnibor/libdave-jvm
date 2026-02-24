@@ -1,6 +1,6 @@
 dependencies {
-    api(projects.api)
-    api(projects.implJni)
+    compileOnly(projects.api)
+    compileOnly(projects.implJni)
 }
 
 val target = ext["target"]?.toString()
