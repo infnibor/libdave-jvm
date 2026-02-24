@@ -93,6 +93,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ${{ matrix.linux_packages }}
+          
+          for tool in clang clang++ lld lld-link ld.lld llvm-ar llvm-strip llvm-objdump llvm-objcopy llvm-readelf llvm-readobj llvm-size llvm-nm llvm-ranlib; do
+            if [ -x "/usr/bin/${tool}-15" ]; then
+              sudo update-alternatives --install /usr/bin/$tool $tool /usr/bin/${tool}-15 100
+              sudo update-alternatives --set $tool /usr/bin/${tool}-15
+            fi
+          done
 
           echo "** Clang alternatives **"
           sudo update-alternatives --display clang || true
