@@ -26,36 +26,44 @@ jobs:
           - os: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
             toolchain: natives/cmake/toolchains/linux-x86_64-gnu.cmake
-            linux_packages: "build-essential cmake ninja-build clang-15 libc++-15-dev libc++abi-15-dev"
+            linux_packages: "build-essential cmake ninja-build"
+            bootlin_url: ""
           - os: ubuntu-22.04
             target: i686-unknown-linux-gnu
             toolchain: natives/cmake/toolchains/linux-i686-gnu.cmake
-            linux_packages: "build-essential cmake ninja-build clang-15 libc++-15-dev libc++abi-15-dev gcc-multilib g++-multilib"
-          - os: ubuntu-22.04-arm
+            linux_packages: "build-essential cmake ninja-build"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--stable-2024.05-1.tar.xz"
+          - os: ubuntu-22.04
             target: aarch64-unknown-linux-gnu
             toolchain: natives/cmake/toolchains/linux-aarch64-gnu.cmake
-            linux_packages: "build-essential cmake ninja-build clang-15 libc++-15-dev libc++abi-15-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu"
-          - os: ubuntu-22.04-arm
+            linux_packages: "build-essential cmake ninja-build"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2024.05-1.tar.xz"
+          - os: ubuntu-22.04
             target: arm-unknown-linux-gnueabihf
             toolchain: natives/cmake/toolchains/linux-armhf-gnu.cmake
-            linux_packages: "build-essential cmake ninja-build clang-15 libc++-15-dev libc++abi-15-dev gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf"
+            linux_packages: "build-essential cmake ninja-build"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2024.05-1.tar.xz"
           # Ubuntu 22.04 - musl
           - os: ubuntu-22.04
             target: x86_64-unknown-linux-musl
             toolchain: natives/cmake/toolchains/linux-x86_64-musl.cmake
-            linux_packages: "build-essential cmake ninja-build clang-15 libc++-15-dev libc++abi-15-dev musl-tools"
+            linux_packages: "build-essential cmake ninja-build"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--musl--stable-2024.05-1.tar.xz"
           - os: ubuntu-22.04
             target: i686-unknown-linux-musl
             toolchain: natives/cmake/toolchains/linux-i686-musl.cmake
-            linux_packages: "build-essential cmake ninja-build clang-15 libc++-15-dev libc++abi-15-dev musl-tools gcc-multilib g++-multilib"
-          - os: ubuntu-22.04-arm
+            linux_packages: "build-essential cmake ninja-build"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--musl--stable-2024.05-1.tar.xz"
+          - os: ubuntu-22.04
             target: aarch64-unknown-linux-musl
             toolchain: natives/cmake/toolchains/linux-aarch64-musl.cmake
-            linux_packages: "build-essential cmake ninja-build clang-15 libc++-15-dev libc++abi-15-dev musl-tools gcc-aarch64-linux-gnu g++-aarch64-linux-gnu"
-          # - os: ubuntu-22.04-arm # TODO: This one is broken in particular, but also not important for us for now
-          #   target: arm-unknown-linux-musleabihf
-          #   toolchain: natives/cmake/toolchains/linux-armhf-musl.cmake
-          #   linux_packages: "build-essential cmake ninja-build musl-tools gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf"
+            linux_packages: "build-essential cmake ninja-build"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--musl--stable-2024.05-1.tar.xz"
+          - os: ubuntu-22.04
+            target: arm-unknown-linux-musleabihf
+            toolchain: natives/cmake/toolchains/linux-armhf-musl.cmake
+            linux_packages: "build-essential cmake ninja-build"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--musl--stable-2024.05-1.tar.xz"
           # Windows MSVC 2022
           - os: windows-2022
             target: x86_64-pc-windows-msvc
@@ -89,25 +97,26 @@ jobs:
           cache: "gradle"
 
       - name: Install Linux build deps
-        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-22.04-arm'
+        if: matrix.os == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y ${{ matrix.linux_packages }}
-          
-          for tool in clang clang++ lld lld-link ld.lld llvm-ar llvm-strip llvm-objdump llvm-objcopy llvm-readelf llvm-readobj llvm-size llvm-nm llvm-ranlib; do
-            if [ -x "/usr/bin/${tool}-15" ]; then
-              sudo update-alternatives --install /usr/bin/$tool $tool /usr/bin/${tool}-15 100
-              sudo update-alternatives --set $tool /usr/bin/${tool}-15
-            fi
-          done
 
-          echo "** Clang alternatives **"
-          sudo update-alternatives --display clang || true
-          echo "** Clang version **"
-          clang --version
+      - name: Install Bootlin toolchain
+        if: matrix.os == 'ubuntu-22.04' && matrix.bootlin_url != ''
+        run: |
+          sudo mkdir -p /opt/toolchains
+          archive="$(basename "${{ matrix.bootlin_url }}")"
+          toolchain_dir="/opt/toolchains/${archive%.tar.xz}"
+
+          if [ ! -d "$toolchain_dir" ]; then
+            curl -sSL "${{ matrix.bootlin_url }}" | sudo tar -xJ -C /opt/toolchains
+            cd "$toolchain_dir"
+            sudo ./relocate-sdk.sh
+          fi
 
       - name: Configure CMake (Linux)
-        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-22.04-arm'
+        if: matrix.os == 'ubuntu-22.04'
         working-directory: ${{ github.workspace }}
         run: |
           cmake -S natives -B natives/cmake-build-${{ matrix.target }} \
@@ -177,7 +186,7 @@ jobs:
           path: natives/build/libs/natives-*.jar
 
       - name: Upload debug symbols (Linux)
-        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-22.04-arm'
+        if: matrix.os == 'ubuntu-22.04'
         uses: actions/upload-artifact@v6
         with:
           name: natives-symbols-${{ matrix.target }}
