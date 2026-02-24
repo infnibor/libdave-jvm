@@ -32,38 +32,38 @@ jobs:
             target: i686-unknown-linux-gnu
             toolchain: natives/cmake/toolchains/linux-i686-gnu.cmake
             linux_packages: "build-essential cmake ninja-build"
-            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--stable-2024.05-1.tar.xz"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--stable-2022.08-1.tar.bz2"
           - os: ubuntu-22.04
             target: aarch64-unknown-linux-gnu
             toolchain: natives/cmake/toolchains/linux-aarch64-gnu.cmake
             linux_packages: "build-essential cmake ninja-build"
-            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2024.05-1.tar.xz"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2022.08-1.tar.bz2"
           - os: ubuntu-22.04
             target: arm-unknown-linux-gnueabihf
             toolchain: natives/cmake/toolchains/linux-armhf-gnu.cmake
             linux_packages: "build-essential cmake ninja-build"
-            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2024.05-1.tar.xz"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2022.08-1.tar.bz2"
           # Ubuntu 22.04 - musl
           - os: ubuntu-22.04
             target: x86_64-unknown-linux-musl
             toolchain: natives/cmake/toolchains/linux-x86_64-musl.cmake
             linux_packages: "build-essential cmake ninja-build"
-            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--musl--stable-2024.05-1.tar.xz"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--musl--stable-2022.08-1.tar.bz2"
           - os: ubuntu-22.04
             target: i686-unknown-linux-musl
             toolchain: natives/cmake/toolchains/linux-i686-musl.cmake
             linux_packages: "build-essential cmake ninja-build"
-            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--musl--stable-2024.05-1.tar.xz"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--musl--stable-2022.08-1.tar.bz2"
           - os: ubuntu-22.04
             target: aarch64-unknown-linux-musl
             toolchain: natives/cmake/toolchains/linux-aarch64-musl.cmake
             linux_packages: "build-essential cmake ninja-build"
-            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--musl--stable-2024.05-1.tar.xz"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--musl--stable-2022.08-2.tar.bz2"
           - os: ubuntu-22.04
             target: arm-unknown-linux-musleabihf
             toolchain: natives/cmake/toolchains/linux-armhf-musl.cmake
             linux_packages: "build-essential cmake ninja-build"
-            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--musl--stable-2024.05-1.tar.xz"
+            bootlin_url: "https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--musl--stable-2022.08-1.tar.bz2"
           # Windows MSVC 2022
           - os: windows-2022
             target: x86_64-pc-windows-msvc
@@ -101,10 +101,10 @@ jobs:
         run: |
           sudo mkdir -p /opt/toolchains
           archive="$(basename "${{ matrix.bootlin_url }}")"
-          toolchain_dir="/opt/toolchains/${archive%.tar.xz}"
+          toolchain_dir="/opt/toolchains/${archive%.tar.bz2}"
 
           if [ ! -d "$toolchain_dir" ]; then
-            curl -sSL "${{ matrix.bootlin_url }}" | sudo tar -xJ -C /opt/toolchains
+            curl -sSL "${{ matrix.bootlin_url }}" | sudo tar -xj -C /opt/toolchains
             cd "$toolchain_dir"
             sudo ./relocate-sdk.sh
           fi

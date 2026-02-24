@@ -1,7 +1,7 @@
 # x86_64 Linux with musl.
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR x86_64)
-set(BOOTLIN_DIR "/opt/toolchains/x86-64--musl--stable-2024.05-1")
+set(BOOTLIN_DIR "/opt/toolchains/x86-64--musl--stable-2022.08-1")
 set(BOOTLIN_PREFIX "x86_64-buildroot-linux-musl")
 
 if(EXISTS "${BOOTLIN_DIR}")

@@ -1,7 +1,7 @@
 # 32-bit x86 Linux (glibc). Use with multilib (-m32) on x86_64 host.
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR i686)
-set(BOOTLIN_DIR "/opt/toolchains/x86-i686--glibc--stable-2024.05-1")
+set(BOOTLIN_DIR "/opt/toolchains/x86-i686--glibc--stable-2022.08-1")
 set(BOOTLIN_PREFIX "i686-buildroot-linux-gnu")
 
 if(EXISTS "${BOOTLIN_DIR}")

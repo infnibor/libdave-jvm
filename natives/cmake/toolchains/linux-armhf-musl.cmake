@@ -1,7 +1,7 @@
 # armhf Linux with musl.
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR armv7l)
-set(BOOTLIN_DIR "/opt/toolchains/armv7-eabihf--musl--stable-2024.05-1")
+set(BOOTLIN_DIR "/opt/toolchains/armv7-eabihf--musl--stable-2022.08-1")
 set(BOOTLIN_PREFIX "arm-buildroot-linux-musleabihf")
 
 if(EXISTS "${BOOTLIN_DIR}")

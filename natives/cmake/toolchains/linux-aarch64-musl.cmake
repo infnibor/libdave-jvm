@@ -1,7 +1,7 @@
 # aarch64 Linux with musl.
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR aarch64)
-set(BOOTLIN_DIR "/opt/toolchains/aarch64--musl--stable-2024.05-1")
+set(BOOTLIN_DIR "/opt/toolchains/aarch64--musl--stable-2022.08-2")
 set(BOOTLIN_PREFIX "aarch64-buildroot-linux-musl")
 
 if(EXISTS "${BOOTLIN_DIR}")

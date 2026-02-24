@@ -43,7 +43,7 @@ dependencies {
     // This will transitively include the `api` module.
     implementation("moe.kyokobot.libdave:impl-jni:1.0-SNAPSHOT")
 
-    // Linux (glibc 2.39)
+    // Linux (glibc 2.35)
     implementation("moe.kyokobot.libdave:natives-linux-x86-64:1.0-SNAPSHOT")
     implementation("moe.kyokobot.libdave:natives-linux-x86:1.0-SNAPSHOT")
     implementation("moe.kyokobot.libdave:natives-linux-aarch64:1.0-SNAPSHOT")
