@@ -28,10 +28,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     "-fdata-sections"
   )
 
-  if(LINUX)
-    list(APPEND _flags_list "-static-libstdc++")
-  endif()
-
   # Check for clang-cl which requires -Xclang before these flags
   set(_is_clang_cl OFF)
   if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
