@@ -111,7 +111,7 @@ public interface Session extends AutoCloseable {
      * @param userId The ID of the user whose ratchet is requested.
      * @return A {@link KeyRatchet} instance.
      */
-    KeyRatchet getKeyRatchet(String userId);
+    @Nullable KeyRatchet getKeyRatchet(String userId);
 
     /**
      * Computes a pairwise fingerprint for verification with another user asynchronously.

@@ -90,9 +90,10 @@ public class NativeSession extends DaveNativeHandle implements Session {
     }
 
     @Override
-    public KeyRatchet getKeyRatchet(String userId) {
+    public @Nullable KeyRatchet getKeyRatchet(String userId) {
         assertOpen();
         long keyRatchetHandle = DaveNativeBindings.inst().daveSessionGetKeyRatchet(handle, userId);
+        if (keyRatchetHandle == 0) return null;
         return new NativeKeyRatchet(keyRatchetHandle);
     }
 
